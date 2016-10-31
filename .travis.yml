@@ -1,0 +1,29 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker pull java:8-jre-alpine
+
+env:
+  global:
+    - VERSION=3.5.3
+
+script:
+  - chmod +x ./build.sh
+  - ./build.sh ${VERSION}
+
+before_deploy:
+  - docker login \
+      --username ${DOCKER_USERNAME} \
+      --password ${DOCKER_PASSWORD}
+
+deploy:
+
+  - provider: script
+    script: docker push aetheric/liquibase
+    skip_cleanup: true
+    on:
+      branch: master
+
