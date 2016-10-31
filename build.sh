@@ -10,3 +10,4 @@ docker build \
 	--tag aetheric/liquibase:${VERSION} \
 	--tag aetheric/liquibase:latest \
 	.
+
