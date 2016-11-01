@@ -25,6 +25,22 @@ RUN pwd \
 	&& chmod +x /opt/liquibase/liquibase
 	&& ln -s /opt/liquibase/liquibase /usr/local/bin/
 
+# Version for postgres required.
+ARG POSTGRES_VERSION
+
+# These aren't really arguments. More like variables.
+ARG POSTGRES_DIST_HOST=http://jdbc.postgresql.org
+ARG POSTGRES_DIST_PATH=${POSTGRES_HOST}/download
+ARG POSTGRES_DIST_NAME=postgresql-${POSTGRES_VERSION}
+ARG POSTGRES_DIST_FILE=${POSTGRES_NAME}.jar
+
+# Install postgres driver
+RUN pwd \
+	&& mkdir /opt/jdbc_drivers \
+	&& curl -fO ${POSTGRES_DIST_PATH}/${POSTGRES_DIST_FILE} \
+	&& mv ${POSTGRES_DIST_FILE} /opt/jdbc_drivers/
+	&& ln -s /opt/jdbc_drivers/${POSTGRES_DIST_FILE} /usr/local/bin/
+
 # Clean up build dependencies.
 RUN apk del .build-dependencies
 

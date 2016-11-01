@@ -8,11 +8,12 @@ before_install:
 
 env:
   global:
-    - VERSION=3.5.3
+    - LIQUIBASE=3.3.9
+    - POSTGRES=9.3.1102.jdbc41
 
 script:
   - chmod +x ./build.sh
-  - ./build.sh ${VERSION}
+  - ./build.sh ${LIQUIBASE} ${POSTGRES}
 
 before_deploy:
   - docker login \
@@ -25,5 +26,5 @@ deploy:
     script: docker push aetheric/liquibase
     skip_cleanup: true
     on:
-      branch: master
+      branch: postgres
 

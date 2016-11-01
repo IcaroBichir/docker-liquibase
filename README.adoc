@@ -1,56 +1,20 @@
-= Docker: Liquibase
+= Docker: Liquibase with Postgres support
 
-image:https://travis-ci.org/aetheric/docker-liquibase.svg?branch=master["Build Status", link="https://travis-ci.org/aetheric/docker-liquibase"]
+image:https://travis-ci.org/aetheric/docker-liquibase-postgres.svg?branch=master["Build Status", link="https://travis-ci.org/aetheric/docker-liquibase-postgres"]
 
 A development environment for liquibase that projects can use as a base.
 
 == Usage
 
-. Just make a `Dockerfile` in your project like this:
-+
-[source,docker]
-----
-FROM aetheric/liquibase:latest
-
-# Add needed alpine packages
-RUN apk --no-cache add --virtual .build-dependencies \
-	curl
-
-ARG POSTGRES_VERSION=9.3.1102.jdbc41
-ARG POSTGRES_DIST_HOST=http://jdbc.postgresql.org
-ARG POSTGRES_DIST_PATH=${POSTGRES_HOST}/download
-ARG POSTGRES_DIST_NAME=postgresql-${POSTGRES_VERSION}
-ARG POSTGRES_DIST_FILE=${POSTGRES_NAME}.jar
-
-# Install whatever binaries you need
-RUN pwd \
-	&& mkdir /opt/jdbc_drivers \
-	&& curl -fO ${POSTGRES_DIST_PATH}/${POSTGRES_DIST_FILE} \
-	&& mv ${POSTGRES_DIST_FILE} /opt/jdbc_drivers/
-	&& ln -s /opt/jdbc_drivers/${POSTGRES_DIST_FILE} /usr/local/bin/
-
-# Make sure to clean up your apk additions.
-RUN apk del .build-dependencies
-----
-
-. Then call the following command to run a build:
+Just get to running docker commands:
 +
 [source,shell]
 ----
-docker build \
-	--tag reponame/projectname \
-	.
-----
-
-. And finally, get to running docker commands:
-+
-[source,shell]
-----
-docker run reponame/projectname \
+docker run aetheric/liquibase:postgres \
 	--volume .:/usr/work \
 	--interactive \
 	--tty \
-	watch
+	update
 ----
 
 It's a good idea to put that last one in a script so commands can be run against the project a lot easier. Alternately, you can run it with the `--interactive` flag to just keep running commands.
